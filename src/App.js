@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import TakeHome from './Components/takeHome/TakeHome'
 import RequiredPay from './Components/requiredPay/RequiredPay'
+import Footer from './Components/Footer/Footer'
 
 class App extends Component {
   state = {
@@ -240,6 +241,7 @@ take_home_pay_monthly = (n, rates, thresholds, nat_insurance_hash) => {
         showButton = {this.requiredShow}
         show = {this.state.showRequiredYearBreakdown}  
       />
+      <Footer/>
     </div>
   );
   }
