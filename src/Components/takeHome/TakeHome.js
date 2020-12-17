@@ -1,8 +1,9 @@
 import React from 'react';
+import '../../Components/taxForm.css';
 
 const TakeHome = (props) => {
     return (
-        <div>
+        <div className = "form">
             <h1>Take home Pay after tax</h1>
             <p>Select year for Pay calculation</p>
             <div onChange={props.setYear}>
@@ -15,8 +16,8 @@ const TakeHome = (props) => {
             
             <p>Take home Yearly: £{props.takeHomeCalc}</p>
             <p>Take home Monthly: £{(props.takeHomeCalc/12).toFixed(2)}</p>
-            
-            <button onClick={props.showButton}>See Breakdown of deductions</button>
+
+            <button onClick={props.showButton}>See Breakdown of Deductions</button>
             { props.show ? <div>
                     <p>Tax: £{props.tax}</p>
                     <p>National insurance: £{props.nat_ins}</p>

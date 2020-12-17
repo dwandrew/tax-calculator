@@ -1,8 +1,9 @@
 import React from 'react';
+import '../../Components/taxForm.css';
 
 const RequiredPay = (props) => {
     return (
-        <div>
+        <div className = "form">
         <h1>Required Pay per Month after tax</h1>
           <p>Select year for Pay calculation</p>
             <div onChange={props.setYear}>
@@ -15,8 +16,8 @@ const RequiredPay = (props) => {
             <input type = "number" onChange={props.requiredChange} value = {props.requiredTakeHome} title= "Insert required monthly pay"/>
             <p>Required Yearly Salary: £{props.requiredTakeHomeCalc}</p>
             <p>Required Monthly Salary: £{(props.requiredTakeHomeCalc/12).toFixed(2)}</p>
-            <button onClick={props.showButton}>See Breakdown of deductions</button>
-            { props.show ? <div>
+            <button onClick={props.showButton}>See Breakdown of Deductions</button>
+            { props.show ? <div className ="extra_info">
                     <p>Tax: £{props.tax}</p>
                     <p>National insurance: £{props.nat_ins}</p>
                     <p>Personal Allowance Remaining: £{props.allowance}</p>
