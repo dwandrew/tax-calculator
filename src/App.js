@@ -126,12 +126,19 @@ take_home_pay_yearly = (n, rates, thresholds, nat_insurance_hash) => {
   takeHomeChange = (event) => {
     let num = event.target.value
     let taxed = this.tax(num, this.state.rates, this.state.thresholds, this.state.ni["19/20"])
-    console.log(taxed)
     this.setState({
       takeHome: num,
       takeHomeCalc: taxed
     })
-    console.log(this.state)
+  }
+
+  requiredChange = (event) => {
+    let num = event.target.value
+    let sum  = this.take_home_pay_monthly(num, this.state.rates, this.state.thresholds, this.state.ni["19/20"])
+    this.setState({
+      requiredTakeHome: num,
+      requiredTakeHomeCalc: sum,
+    })
   }
 
 
