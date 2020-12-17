@@ -7,6 +7,8 @@ class App extends Component {
   state = {
     takeHome: 0,
     takeHomeCalc:0,
+    takeHomeYear: '19/20',
+    requiredYear:'19/20',
     requiredTakeHome: 0,
     requiredTakeHomeCalc: 0,
     rates: {"basic_rate": 0.2, "higher_rate": 0.4, "additional_rate": 0.45 },
@@ -122,19 +124,36 @@ take_home_pay_yearly = (n, rates, thresholds, nat_insurance_hash) => {
     }
     return n
 }
+  takeHomeYear = (event) => {
+    let taxed = this.tax(this.state.takeHome, this.state.rates, this.state.thresholds, this.state.ni[event.target.value])
+    this.setState({
+      takeHomeYear: event.target.value,
+      takeHomeCalc: taxed
+    })
+    console.log(this.state)
+  }
 
   takeHomeChange = (event) => {
     let num = event.target.value
-    let taxed = this.tax(num, this.state.rates, this.state.thresholds, this.state.ni["19/20"])
+    let taxed = this.tax(num, this.state.rates, this.state.thresholds, this.state.ni[this.state.takeHomeYear])
     this.setState({
       takeHome: num,
       takeHomeCalc: taxed
     })
   }
 
+  requiredYear = (event) => {
+    let sum = this.take_home_pay_monthly(this.state.requiredTakeHome, this.state.rates, this.state.thresholds, this.state.ni[event.target.value])
+    this.setState({
+      requiredYear: event.target.value,
+      requiredTakeHomeCalc: sum,
+    })
+    console.log(this.state)
+  }
+
   requiredChange = (event) => {
     let num = event.target.value
-    let sum  = this.take_home_pay_monthly(num, this.state.rates, this.state.thresholds, this.state.ni["19/20"])
+    let sum  = this.take_home_pay_monthly(num, this.state.rates, this.state.thresholds, this.state.ni[this.state.requiredYear])
     this.setState({
       requiredTakeHome: num,
       requiredTakeHomeCalc: sum,
@@ -147,8 +166,8 @@ take_home_pay_yearly = (n, rates, thresholds, nat_insurance_hash) => {
   
   render() {return (
     <div className="App">
-      <TakeHome takeHome = {this.state.takeHome} takeHomeCalc={this.state.takeHomeCalc} takeHomeChange={this.takeHomeChange}/>
-      <RequiredPay requiredTakeHome = {this.state.requiredTakeHome} requiredTakeHomeCalc = {this.state.requiredTakeHomeCalc} requiredChange = {this.requiredChange}/>
+      <TakeHome setYear = {this.takeHomeYear} year = {this.state.takeHomeYear} takeHome = {this.state.takeHome} takeHomeCalc={this.state.takeHomeCalc} takeHomeChange={this.takeHomeChange}/>
+      <RequiredPay setYear = {this.requiredYear} year = {this.state.requiredYear} requiredTakeHome = {this.state.requiredTakeHome} requiredTakeHomeCalc = {this.state.requiredTakeHomeCalc} requiredChange = {this.requiredChange}/>
     </div>
   );
   }
