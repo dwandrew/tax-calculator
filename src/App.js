@@ -26,7 +26,6 @@ class App extends Component {
       "19/20": {"lower_limit": 719, "upper_limit": 4167},
       "20/21": {"lower_limit": 792, "upper_limit": 4167}
     }
-
   }
 
   // National insurance calculator
@@ -117,7 +116,6 @@ let final_hash = {
     "tax": tax.toFixed(2)
   }
 return final_hash
-// return final.toFixed(2)
 }
 
 // Take home pay calculator montly take home
@@ -141,7 +139,7 @@ take_home_pay_monthly = (n, rates, thresholds, nat_insurance_hash) => {
     }
     return required_hash
 }
-// For setting year and recaculating if year get changed 
+// For setting year and recaculating if year gets changed 
 
   takeHomeYear = (event) => {
     let taxed = this.tax(this.state.takeHome, this.state.rates, this.state.thresholds, this.state.ni[event.target.value])
@@ -176,7 +174,7 @@ take_home_pay_monthly = (n, rates, thresholds, nat_insurance_hash) => {
     })
   }
 
-  // For setting year and recaculating if year get changed 
+  // For setting year and recaculating if year gets changed 
 
   requiredYear = (event) => {
     let sum = this.take_home_pay_monthly(this.state.requiredTakeHome, this.state.rates, this.state.thresholds, this.state.ni[event.target.value])
@@ -190,7 +188,7 @@ take_home_pay_monthly = (n, rates, thresholds, nat_insurance_hash) => {
 
   }
 
-  // for working out what wage needs to be paid for a montly takehome
+  // for working out what wage needs to be paid for a monthly take home
 
   requiredChange = (event) => {
     let num = event.target.value
@@ -205,7 +203,7 @@ take_home_pay_monthly = (n, rates, thresholds, nat_insurance_hash) => {
   }
 
 
-// for presenting or hiding take required monthly information
+// for presenting or hiding required monthly information
   requiredShow = () => {
     this.setState({
       showRequiredYearBreakdown: !this.state.showRequiredYearBreakdown
