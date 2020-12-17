@@ -1,7 +1,6 @@
 
-
 .take-home-form{
-    overflow: scroll;
+    overflow-y: auto;
     position: fixed;
     top: 0;
     left: 5%;
@@ -17,7 +16,7 @@
     width: 35%;
 }
 .required-form{
-    overflow: scroll;
+    overflow-y: auto;
     position: fixed;
     top: 0;
     right: 5%;
@@ -83,7 +82,7 @@ button:hover{
 
 
 .take-home-form{
-    overflow: scroll;
+    overflow-y: auto;
     position: fixed;
     top: 0;
     left:auto;
@@ -101,7 +100,7 @@ button:hover{
     width: 70%;
 }
 .required-form{
-    overflow: scroll;
+    overflow-y: auto;
     position: fixed;
     margin-left:auto;
     margin-right: auto;
