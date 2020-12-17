@@ -115,7 +115,6 @@ let final_hash = {
     "allowance": allowance, 
     "tax": tax.toFixed(2)
   }
-console.log(final_hash)
 return final_hash
 // return final.toFixed(2)
 }
@@ -130,21 +129,19 @@ take_home_pay_monthly = (n, rates, thresholds, nat_insurance_hash) => {
         taxed = this.tax(yearly, rates, thresholds, nat_insurance_hash)
         monthly = taxed["final"]/12
     }
-    console.log(taxed)
-    return yearly
-}
 
-// Take home pay calculator yearly take home
-
-
-take_home_pay_yearly = (n, rates, thresholds, nat_insurance_hash) => {
-    let taxed = this.tax(n, rates, thresholds, nat_insurance_hash)
-    let target = n
-    for(n;  taxed["final"] < target; n+=500){
-        taxed = this.tax(n, rates, thresholds, nat_insurance_hash)
+    taxed = this.tax(yearly, rates, thresholds, nat_insurance_hash)
+    let required_hash = {
+      "yearly": yearly, 
+      "nat_ins": taxed["nat_ins"], 
+      tax: taxed["tax"], 
+      takeHomeYearly: taxed["final"], 
+      allowance: taxed["allowance"]
     }
-    return n
+    return required_hash
 }
+// For setting year and recaculating if year get changed 
+
   takeHomeYear = (event) => {
     let taxed = this.tax(this.state.takeHome, this.state.rates, this.state.thresholds, this.state.ni[event.target.value])
     this.setState({
@@ -156,6 +153,7 @@ take_home_pay_yearly = (n, rates, thresholds, nat_insurance_hash) => {
     })
 
   }
+  // For getting yearly wage information and processing it for take home wage 
 
   takeHomeChange = (event) => {
     let num = event.target.value
@@ -169,23 +167,7 @@ take_home_pay_yearly = (n, rates, thresholds, nat_insurance_hash) => {
     })
   }
 
-  requiredYear = (event) => {
-    let sum = this.take_home_pay_monthly(this.state.requiredTakeHome, this.state.rates, this.state.thresholds, this.state.ni[event.target.value])
-    this.setState({
-      requiredYear: event.target.value,
-      requiredTakeHomeCalc: sum,
-    })
-
-  }
-
-  requiredChange = (event) => {
-    let num = event.target.value
-    let sum  = this.take_home_pay_monthly(num, this.state.rates, this.state.thresholds, this.state.ni[this.state.requiredYear])
-    this.setState({
-      requiredTakeHome: num,
-      requiredTakeHomeCalc: sum,
-    })
-  }
+// for presenting or hiding take home breakdown information
 
   takeHomeShow = () => {
     this.setState({
@@ -193,6 +175,36 @@ take_home_pay_yearly = (n, rates, thresholds, nat_insurance_hash) => {
     })
   }
 
+  // For setting year and recaculating if year get changed 
+
+  requiredYear = (event) => {
+    let sum = this.take_home_pay_monthly(this.state.requiredTakeHome, this.state.rates, this.state.thresholds, this.state.ni[event.target.value])
+    this.setState({
+      requiredYear: event.target.value,
+      requiredTakeHomeCalc: sum["yearly"],
+      requiredTakeHomeTax:sum["tax"],
+      requiredTakeHomeNatIns: sum["nat_ins"],
+      requiredTakeHomeAllowance: sum["allowance"]
+    })
+
+  }
+
+  // for working out what wage needs to be paid for a montly takehome
+
+  requiredChange = (event) => {
+    let num = event.target.value
+    let sum  = this.take_home_pay_monthly(num, this.state.rates, this.state.thresholds, this.state.ni[this.state.requiredYear])
+    this.setState({
+      requiredTakeHome: num,
+      requiredTakeHomeCalc: sum["yearly"],
+      requiredTakeHomeTax:sum["tax"],
+      requiredTakeHomeNatIns: sum["nat_ins"],
+      requiredTakeHomeAllowance: sum["allowance"]
+    })
+  }
+
+
+// for presenting or hiding take required monthly information
   requiredShow = () => {
     this.setState({
       showRequiredYearBreakdown: !this.state.showRequiredYearBreakdown
@@ -222,6 +234,11 @@ take_home_pay_yearly = (n, rates, thresholds, nat_insurance_hash) => {
         requiredTakeHome = {this.state.requiredTakeHome} 
         requiredTakeHomeCalc = {this.state.requiredTakeHomeCalc} 
         requiredChange = {this.requiredChange}
+        nat_ins = {this.state.requiredTakeHomeNatIns}
+        allowance = {this.state.requiredTakeHomeAllowance}
+        tax = {this.state.requiredTakeHomeTax}
+        showButton = {this.requiredShow}
+        show = {this.state.showRequiredYearBreakdown}  
       />
     </div>
   );
