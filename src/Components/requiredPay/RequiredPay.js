@@ -5,8 +5,8 @@ const RequiredPay = (props) => {
     return (
         <div className = "required-form">
         <h1>Required Pay per Month after tax</h1>
-          <h3>Select year for Pay calculation</h3>
-
+          
+            <h3>Select Year for Pay calculation</h3>
             <div onChange={props.setYear} className ="extra-info">
                 <input type="radio" value="19/20" name="requiredYear"  defaultChecked/> 2019/20
                 <br/>
@@ -22,7 +22,8 @@ const RequiredPay = (props) => {
             </div>
 
             <button onClick={props.showButton}>See Breakdown of Deductions</button>
-            { props.show ? <div className ="extra-info">
+            { props.show ? 
+                <div className ="extra-info">
                     <p>Tax: £{props.tax}</p>
                     <p>National insurance: £{props.nat_ins}</p>
                     <p>Personal Allowance Remaining: £{props.allowance}</p>
