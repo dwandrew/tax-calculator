@@ -1,31 +1,36 @@
 
+
 .take-home-form{
+    overflow: scroll;
     position: fixed;
     top: 0;
-    left: 10%;
+    left: 5%;
     height:75%;
+    max-height: fit-content;
     background-color: rgba(214, 214, 214, 0.3);
     margin: 20px 20px;
-    padding: 20px;
+    padding: 10px;
     border: 1px solid black;
     box-shadow: 2px 3px 5px black;
     font-family: Helvetica, sans-serif;
     font-weight: 500;
-    width: 30%;
+    width: 35%;
 }
 .required-form{
+    overflow: scroll;
     position: fixed;
     top: 0;
-    right: 10%;
+    right: 5%;
     height:75%;
+    max-height: fit-content;
     background-color: rgba(214, 214, 214, 0.3);
     margin: 20px 20px;
-    padding: 20px;
+    padding: 10px;
     border: 1px solid black;
     box-shadow: 2px 3px 5px black;
     font-family: Helvetica, sans-serif;
     font-weight: 500;
-    width: 30%;
+    width: 35%;
 }
 
 .extra-info{
@@ -72,4 +77,46 @@ button {
 button:hover{
     background-color: rebeccapurple;
     color: black;
+}
+
+@media only screen and (max-width: 600px) {
+
+
+.take-home-form{
+    overflow: scroll;
+    position: fixed;
+    top: 0;
+    left:auto;
+    right: 10%;
+    margin-left:auto;
+    margin-right: auto;
+    height: 35%;
+    background-color: rgba(214, 214, 214, 0.3);
+    margin: 20px 20px;
+    padding: 10px;
+    border: 1px solid black;
+    box-shadow: 2px 3px 5px black;
+    font-family: Helvetica, sans-serif;
+    font-weight: 500;
+    width: 70%;
+}
+.required-form{
+    overflow: scroll;
+    position: fixed;
+    margin-left:auto;
+    margin-right: auto;
+    top: 43%;
+    left:auto;
+    right: 10%;
+    height:35%;
+    background-color: rgba(214, 214, 214, 0.3);
+    margin: 20px 20px;
+    padding: 10px;
+    border: 1px solid black;
+    box-shadow: 2px 3px 5px black;
+    font-family: Helvetica, sans-serif;
+    font-weight: 500;
+    width: 70%;
+}
+
 }
