@@ -5,12 +5,20 @@ import RequiredPay from './Components/requiredPay/RequiredPay'
 
 class App extends Component {
   state = {
+    showTakeHomebreakdown: false,
     takeHome: 0,
     takeHomeCalc:0,
+    takeHomeTax:0,
+    takeHomeNatIns:0,
+    takeHomeAllowance:0,
     takeHomeYear: '19/20',
+    showRequiredYearBreakdown: false,
     requiredYear:'19/20',
     requiredTakeHome: 0,
     requiredTakeHomeCalc: 0,
+    requiredTakeHomeTax:0,
+    requiredTakeHomeNatIns:0,
+    requiredTakeHomeAllowance:0,
     rates: {"basic_rate": 0.2, "higher_rate": 0.4, "additional_rate": 0.45 },
     thresholds:{"lowest": 12500, "basic": 50000, "higher": 150000},
     ni: {
@@ -61,49 +69,55 @@ personal_allowance = (n, allowance) => {
 // final tax calculator
 
 tax = (n, rates, thresholds, nat_insurance_hash) => {
-let final
-let nat_ins_deductions = n - this.nat_insurance(n, nat_insurance_hash)
-let allowance = this.personal_allowance(n, 12500)
-let tax = 0
+  let final
+  let nat_ins_deductions = n - this.nat_insurance(n, nat_insurance_hash)
+  let allowance = this.personal_allowance(n, 12500)
+  let tax = 0
 
-if (n<= thresholds["lowest"]) {
-    let total = n - nat_ins_deductions
-    final = total 
-}
-else if (n <= thresholds["basic"]){
-    let taxable = n - allowance
-    let total = taxable - (taxable * rates["basic_rate"])
-    tax = taxable - total
-    total += allowance
-    total -= nat_ins_deductions
-    final = total
-}
-else if (n <= thresholds["higher"]) {
-    let taxable = n - allowance
-    let basic = thresholds["basic"] - 12500
-    let higher = taxable - basic
-    basic -= basic * rates["basic_rate"]
-    higher -= higher * rates["higher_rate"]
-    let total = basic + higher + allowance
-    tax = taxable - total
-    total -= nat_ins_deductions
-    final = total
-}
-else {
-    let basic = thresholds["basic"] - 12500
-    let higher = thresholds["higher"] - basic
-    let additional = n - thresholds["higher"]
-    basic -= basic * rates["basic_rate"]
-    higher -= higher * rates["higher_rate"]
-    additional -= additional * rates["additional_rate"]
-    let total = basic + higher + additional + allowance
-    tax = n - total
-    total -= nat_ins_deductions
-    final = total
-}
-let final_hash = {final: final.toFixed(2), nat_ins: nat_ins_deductions.toFixed(2), allowance: allowance, tax: tax.toFixed(2)}
+  if (n<= thresholds["lowest"]) {
+      let total = n - nat_ins_deductions
+      final = total 
+  }
+  else if (n <= thresholds["basic"]){
+      let taxable = n - allowance
+      let total = taxable - (taxable * rates["basic_rate"])
+      tax = taxable - total
+      total += allowance
+      total -= nat_ins_deductions
+      final = total
+  }
+  else if (n <= thresholds["higher"]) {
+      let taxable = n - allowance
+      let basic = thresholds["basic"] - 12500
+      let higher = taxable - basic
+      basic -= basic * rates["basic_rate"]
+      higher -= higher * rates["higher_rate"]
+      let total = basic + higher + allowance
+      tax = taxable - (basic + higher)
+      total -= nat_ins_deductions
+      final = total
+  }
+  else {
+      let basic = thresholds["basic"] - 12500
+      let higher = thresholds["higher"] - basic
+      let additional = n - thresholds["higher"]
+      basic -= basic * rates["basic_rate"]
+      higher -= higher * rates["higher_rate"]
+      additional -= additional * rates["additional_rate"]
+      let total = basic + higher + additional + allowance
+      tax = n - total
+      total -= nat_ins_deductions
+      final = total
+  }
+let final_hash = {
+    "final": final.toFixed(2), 
+    "nat_ins": nat_ins_deductions.toFixed(2), 
+    "allowance": allowance, 
+    "tax": tax.toFixed(2)
+  }
 console.log(final_hash)
-return final.toFixed(2)
+return final_hash
+// return final.toFixed(2)
 }
 
 // Take home pay calculator montly take home
@@ -111,11 +125,12 @@ return final.toFixed(2)
 take_home_pay_monthly = (n, rates, thresholds, nat_insurance_hash) => {
     let yearly = n * 12
     let taxed = this.tax(yearly, rates, thresholds, nat_insurance_hash)
-    let monthly = taxed/12
+    let monthly = taxed["final"]/12
     for(yearly; monthly < n; yearly+=100){
         taxed = this.tax(yearly, rates, thresholds, nat_insurance_hash)
-        monthly = taxed/12
+        monthly = taxed["final"]/12
     }
+    console.log(taxed)
     return yearly
 }
 
@@ -125,7 +140,7 @@ take_home_pay_monthly = (n, rates, thresholds, nat_insurance_hash) => {
 take_home_pay_yearly = (n, rates, thresholds, nat_insurance_hash) => {
     let taxed = this.tax(n, rates, thresholds, nat_insurance_hash)
     let target = n
-    for(n;  taxed < target; n+=500){
+    for(n;  taxed["final"] < target; n+=500){
         taxed = this.tax(n, rates, thresholds, nat_insurance_hash)
     }
     return n
@@ -134,7 +149,10 @@ take_home_pay_yearly = (n, rates, thresholds, nat_insurance_hash) => {
     let taxed = this.tax(this.state.takeHome, this.state.rates, this.state.thresholds, this.state.ni[event.target.value])
     this.setState({
       takeHomeYear: event.target.value,
-      takeHomeCalc: taxed
+      takeHomeCalc: taxed["final"],
+      takeHomeNatIns: taxed["nat_ins"],
+      takeHomeTax: taxed["tax"],
+      takeHomeAllowance: taxed["allowance"]
     })
 
   }
@@ -144,7 +162,10 @@ take_home_pay_yearly = (n, rates, thresholds, nat_insurance_hash) => {
     let taxed = this.tax(num, this.state.rates, this.state.thresholds, this.state.ni[this.state.takeHomeYear])
     this.setState({
       takeHome: num,
-      takeHomeCalc: taxed
+      takeHomeCalc: taxed["final"],
+      takeHomeNatIns: taxed["nat_ins"],
+      takeHomeTax: taxed["tax"],
+      takeHomeAllowance: taxed["allowance"]
     })
   }
 
@@ -166,14 +187,42 @@ take_home_pay_yearly = (n, rates, thresholds, nat_insurance_hash) => {
     })
   }
 
+  takeHomeShow = () => {
+    this.setState({
+      showTakeHomebreakdown: !this.state.showTakeHomebreakdown
+    })
+  }
+
+  requiredShow = () => {
+    this.setState({
+      showRequiredYearBreakdown: !this.state.showRequiredYearBreakdown
+    })
+  }
 
 
 
   
   render() {return (
     <div className="App">
-      <TakeHome setYear = {this.takeHomeYear} year = {this.state.takeHomeYear} takeHome = {this.state.takeHome} takeHomeCalc={this.state.takeHomeCalc} takeHomeChange={this.takeHomeChange}/>
-      <RequiredPay setYear = {this.requiredYear} year = {this.state.requiredYear} requiredTakeHome = {this.state.requiredTakeHome} requiredTakeHomeCalc = {this.state.requiredTakeHomeCalc} requiredChange = {this.requiredChange}/>
+      <TakeHome 
+        setYear = {this.takeHomeYear} 
+        year = {this.state.takeHomeYear} 
+        takeHome = {this.state.takeHome} 
+        takeHomeCalc={this.state.takeHomeCalc} 
+        takeHomeChange={this.takeHomeChange}
+        nat_ins = {this.state.takeHomeNatIns}
+        allowance = {this.state.takeHomeAllowance}
+        tax = {this.state.takeHomeTax}
+        showButton = {this.takeHomeShow}
+        show = {this.state.showTakeHomebreakdown}  
+      />
+      <RequiredPay 
+        setYear = {this.requiredYear} 
+        year = {this.state.requiredYear} 
+        requiredTakeHome = {this.state.requiredTakeHome} 
+        requiredTakeHomeCalc = {this.state.requiredTakeHomeCalc} 
+        requiredChange = {this.requiredChange}
+      />
     </div>
   );
   }
