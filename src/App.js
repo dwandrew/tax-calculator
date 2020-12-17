@@ -64,6 +64,7 @@ tax = (n, rates, thresholds, nat_insurance_hash) => {
 let final
 let nat_ins_deductions = n - this.nat_insurance(n, nat_insurance_hash)
 let allowance = this.personal_allowance(n, 12500)
+let tax = 0
 
 if (n<= thresholds["lowest"]) {
     let total = n - nat_ins_deductions
@@ -72,8 +73,9 @@ if (n<= thresholds["lowest"]) {
 else if (n <= thresholds["basic"]){
     let taxable = n - allowance
     let total = taxable - (taxable * rates["basic_rate"])
-    total -= nat_ins_deductions
+    tax = taxable - total
     total += allowance
+    total -= nat_ins_deductions
     final = total
 }
 else if (n <= thresholds["higher"]) {
@@ -83,6 +85,7 @@ else if (n <= thresholds["higher"]) {
     basic -= basic * rates["basic_rate"]
     higher -= higher * rates["higher_rate"]
     let total = basic + higher + allowance
+    tax = taxable - total
     total -= nat_ins_deductions
     final = total
 }
@@ -94,9 +97,12 @@ else {
     higher -= higher * rates["higher_rate"]
     additional -= additional * rates["additional_rate"]
     let total = basic + higher + additional + allowance
+    tax = n - total
     total -= nat_ins_deductions
     final = total
 }
+let final_hash = {final: final.toFixed(2), nat_ins: nat_ins_deductions.toFixed(2), allowance: allowance, tax: tax.toFixed(2)}
+console.log(final_hash)
 return final.toFixed(2)
 }
 
@@ -130,7 +136,7 @@ take_home_pay_yearly = (n, rates, thresholds, nat_insurance_hash) => {
       takeHomeYear: event.target.value,
       takeHomeCalc: taxed
     })
-    console.log(this.state)
+
   }
 
   takeHomeChange = (event) => {
@@ -148,7 +154,7 @@ take_home_pay_yearly = (n, rates, thresholds, nat_insurance_hash) => {
       requiredYear: event.target.value,
       requiredTakeHomeCalc: sum,
     })
-    console.log(this.state)
+
   }
 
   requiredChange = (event) => {
