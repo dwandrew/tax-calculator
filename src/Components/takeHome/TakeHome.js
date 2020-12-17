@@ -4,7 +4,8 @@ const TakeHome = (props) => {
     return (
         <div>
             <h1>Take home Pay</h1>
-            <input type = "number" onChange={props.userChange} value = {props.username}/>
+            <input type = "number" onChange={props.takeHomeChange} value = {props.takeHome}/>
+            <p>{props.takeHomecalc}</p>
         </div>
 
     )

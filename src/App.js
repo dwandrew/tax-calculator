@@ -10,10 +10,13 @@ class App extends Component {
     requiredTakeHomeCalc: 0
   }
   
+  takeHomeChange = (event) => {
+
+  }
   
   render() {return (
     <div className="App">
-      <TakeHome />
+      <TakeHome takeHome = {this.state.takeHome} takeHomeCalc = {this.state.takeHomeCalc}/>
     </div>
   );
   }
