@@ -79,19 +79,18 @@ button:hover{
 }
 
 @media only screen and (max-width: 600px) {
-
+body{
+    overflow-y: scroll;
+}
 
 .take-home-form{
-    overflow-y: auto;
-    position: fixed;
+    position: relative;
     top: 0;
-    left:auto;
-    right: 10%;
-    margin-left:auto;
+    left: 0;
+    height: max-content;
+    margin-left: auto;
     margin-right: auto;
-    height: 35%;
     background-color: rgba(214, 214, 214, 0.3);
-    margin: 20px 20px;
     padding: 10px;
     border: 1px solid black;
     box-shadow: 2px 3px 5px black;
@@ -100,17 +99,15 @@ button:hover{
     width: 70%;
 }
 .required-form{
-    overflow-y: auto;
-    position: fixed;
-    margin-left:auto;
-    margin-right: auto;
+    position: relative;
     top: 43%;
-    left:auto;
-    right: 10%;
-    height:35%;
+    left: 0;
+    height: max-content;
     background-color: rgba(214, 214, 214, 0.3);
-    margin: 20px 20px;
+    margin-left: auto;
+    margin-right: auto;
     padding: 10px;
+    margin-bottom: 100px;
     border: 1px solid black;
     box-shadow: 2px 3px 5px black;
     font-family: Helvetica, sans-serif;
